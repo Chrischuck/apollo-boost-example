@@ -1,0 +1,41 @@
+version: '3.3'
+
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    image: database
+    ports:
+      - '5432:5432'
+    volumes:
+      - my-db:/var/lib/postgres
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: apollo/client
+    volumes:
+      - ./client:/app
+    command: npm run dev
+    ports:
+      - '1234:1234'
+    links:
+      - server:server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: apollo/server
+    volumes:
+      - ./server:/app
+    command: npm run dev
+    environment:
+      - POSTGRES_CONNECTION_URI=postgres://user:password@postgres:5432/db
+    ports:
+      - '4000:4000'
+volumes:
+  my-db:
