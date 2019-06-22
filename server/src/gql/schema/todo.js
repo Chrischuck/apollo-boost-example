@@ -2,10 +2,11 @@ const { gql } = require('apollo-server-express');
 
 const todo = gql`
   type Todo {
-    id: String!
+    id: ID!
     title: String!
     textData: String
-    createdAt: Int!
+    createdAt: Date!
+    updatedAt: Date
   }
 `;
 
