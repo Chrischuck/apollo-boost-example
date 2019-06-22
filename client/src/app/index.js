@@ -7,23 +7,49 @@ import mutation from './gql/todos/todos.mutation'
 import VirtualTable from './components/virtualizedTable'
 
 @compose(
-  graphql(query),
- graphql(mutation)
+  graphql(query, {
+    options: {
+      variables: {
+        limit: 10,
+      }
+    }
+  }),
+  graphql(mutation)
 )
 export default class App extends React.Component {
+
+  fetchMore = () => {
+    const { data: { todo = [], fetchMore} } = this.props;
+
+    fetchMore({
+      variables: {
+        offset: todo.length,
+        limit: 10
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          todo: [...prev.todo, ...fetchMoreResult.todo]
+        }
+      }
+    })
+  }
+
   render() {
-    const { data: { refetch, todo = [] } } = this.props;
+    const { data: { todo = [], loading } } = this.props;
 
     return (
       <div style={{width: '100%', height: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <input placeholder="title" />
           <textarea placeholder="text" />
-          <button>Create Todo</button>
+          <button onClick={this.fetchMore}>Create Todo</button>
         </div>
         <VirtualTable
           data={todo}
-          rowHeight={50}
+          rowHeight={100}
+          fetchMore={this.fetchMore}
+
         />
       </div>
     )
