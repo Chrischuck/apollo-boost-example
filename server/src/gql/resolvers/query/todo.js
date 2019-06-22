@@ -8,6 +8,7 @@ const resolver = {
       return res.rows;
     }
     const res = await client.query('SELECT * FROM todo');
+    console.log(res.rows)
     return res.rows;
   }
 }
