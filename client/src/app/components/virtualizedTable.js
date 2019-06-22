@@ -41,7 +41,7 @@ export default class extends React.Component {
       rowHeight,
       fetchMore,
     } = this.props;
-    
+
     const {
       scrollTop: prevScrollTop,
     } = this.state;
@@ -52,11 +52,13 @@ export default class extends React.Component {
       offsetHeight,
       scrollTop,
     } = this.containerDiv;
+
     const virtualListHeight = rowHeight * data.length;
     
+    // if you're at the end of the list and at the bottom
+    // it will continuously fetch...need some sort of check for this
     if (scrollTop / virtualListHeight > .7) {
       fetchMore()
-      return window.requestAnimationFrame(this.updateVisibilityData)
     }
     if (prevScrollTop === scrollTop) {
       return window.requestAnimationFrame(this.updateVisibilityData)
@@ -66,7 +68,8 @@ export default class extends React.Component {
       dataToRender,
       topOffsetHeight,
     } = this.calculateVisibilityData(data, scrollTop, offsetHeight, rowHeight);
-
+    // scrolling way too fast can bring some scary race conditions...
+    //console.log(dataToRender)
     return this.setState({
       dataToRender,
       topOffsetHeight,
@@ -87,7 +90,7 @@ export default class extends React.Component {
     const bufferHeight = firstRowToRenderIndex * rowHeight;
 
     const dataToRender = data.slice(firstRowToRenderIndex, lastRowToRenderIndex);
-    console.log(dataToRender)
+    
     return {
       dataToRender,
       topOffsetHeight: bufferHeight,
