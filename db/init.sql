@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS todo (
   id serial PRIMARY KEY,
   title varchar (50),
   "textData" varchar (500),
-  "createdAt" TIMESTAMP NOT NULL
+  "createdAt" TIMESTAMP NOT NULL,
+  "updatedAt" TIMESTAMP
 );
 
 INSERT INTO todo(title, "textData", "createdAt") VALUES('Seeded Data', 'APOLLOOOOOO', current_timestamp);

@@ -3,7 +3,7 @@ const Todo = require('../../models/todo');
 const resolver = {
   async todo(_, { id, limit, offset }) {
     const options = {};
-    console.log(limit)
+
     if (limit) {
       options.limit = limit;
     }

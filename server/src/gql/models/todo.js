@@ -6,6 +6,7 @@ const Todo = sequelize.define('todo', {
   id: {
     primaryKey: true,
     type: Sequelize.STRING,
+    autoIncrement: true,
     allowNull: false
   },
   title: {
